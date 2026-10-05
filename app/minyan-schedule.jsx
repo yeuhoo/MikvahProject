@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 
 const minyanim = [
   { time: '6:15 AM', name: 'Bais Medrash', address: '123 Maple Avenue', distance: '0.4', walk: 8, status: 'next' },
@@ -17,18 +18,14 @@ function Icon({ type }) {
 export default function MinyanSchedule() {
   const dialog = useRef(null);
   const [selected, setSelected] = useState(null);
-  const [notice, setNotice] = useState('');
   function showShul(minyan) {
     setSelected(minyan);
     dialog.current.showModal();
   }
-  function viewAll() {
-    setNotice('All 5 sample Shacharis minyanim are shown. The full community directory is coming soon.');
-  }
   return <section className="schedule" aria-labelledby="schedule-heading">
     <div className="schedule-heading">
       <div><p className="eyebrow">UPCOMING NEAR YOU</p><h2 id="schedule-heading">Today&apos;s Shacharis Minyanim</h2><p className="schedule-summary">Cedar Grove · Today · Within 2 miles · 5 results</p></div>
-      <button className="schedule-all-link" onClick={viewAll}>View All Shacharis Minyanim <span aria-hidden="true">→</span></button>
+      <Link className="schedule-all-link" href="/minyanim?prayer=Shacharis">View All Shacharis Minyanim <span aria-hidden="true">→</span></Link>
     </div>
     <ul className="schedule-list" aria-label="Sample Shacharis schedule">
       {minyanim.map((minyan) => <li key={minyan.time} className={`schedule-row ${minyan.status || ''}`}>
@@ -39,8 +36,7 @@ export default function MinyanSchedule() {
         <button className="schedule-button" onClick={() => showShul(minyan)} aria-label={`View ${minyan.name}, ${minyan.time}`}>View Shul</button>
       </li>)}
     </ul>
-    <div className="schedule-footer"><button className="schedule-button" onClick={viewAll}>View All Minyanim <span aria-hidden="true">→</span></button><p>Times shown are sample application data.</p></div>
-    {notice && <p className="schedule-notice" role="status">{notice}</p>}
+    <div className="schedule-footer"><Link className="schedule-button" href="/minyanim">View All Minyanim <span aria-hidden="true">→</span></Link><p>Times shown are sample application data.</p></div>
     <dialog ref={dialog} className="shul-dialog"><div><p className="eyebrow">SAMPLE SHUL DETAILS</p><h2>{selected?.name}</h2><p>{selected?.address}</p><p>Shacharis · {selected?.time}</p><p className="shul-disclaimer">These are sample details for the homepage preview, not a verified prayer schedule.</p><form method="dialog"><button className="schedule-button">Close</button></form></div></dialog>
   </section>;
 }
