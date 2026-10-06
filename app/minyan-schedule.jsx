@@ -29,11 +29,11 @@ export default function MinyanSchedule() {
     </div>
     <ul className="schedule-list" aria-label="Sample Shacharis schedule">
       {minyanim.map((minyan) => <li key={minyan.time} className={`schedule-row ${minyan.status || ''}`}>
-        <div className="schedule-time"><span>{minyan.time}</span><small>SAMPLE TIME</small></div>
+        <div className="schedule-time"><small>LOCAL TIME</small><span>{minyan.time.split(' ')[0]}<span className="schedule-period">{minyan.time.split(' ')[1]}</span></span></div>
         <div className="schedule-shul"><h3>{minyan.name}</h3><p>{minyan.address}</p></div>
         <div className="schedule-distance"><span><Icon type="pin" />{minyan.distance} mi</span><span><Icon type="clock" />{minyan.walk} min walk</span></div>
         <div className="schedule-status">{minyan.status && <span className={`schedule-badge ${minyan.status}`}><span aria-hidden="true">{minyan.status === 'next' ? '✓' : '◷'}</span>{minyan.status === 'next' ? 'NEXT MINYAN' : 'STARTING SOON'}</span>}</div>
-        <button className="schedule-button" onClick={() => showShul(minyan)} aria-label={`View ${minyan.name}, ${minyan.time}`}>View Shul</button>
+        <button className="schedule-button" onClick={() => showShul(minyan)} aria-label={`View ${minyan.name}, ${minyan.time}`}>View Shul <span aria-hidden="true">→</span></button>
       </li>)}
     </ul>
     <div className="schedule-footer"><Link className="schedule-button" href="/minyanim">View All Minyanim <span aria-hidden="true">→</span></Link><p>Times shown are sample application data.</p></div>
