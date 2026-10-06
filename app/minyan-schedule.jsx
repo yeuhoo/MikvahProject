@@ -24,19 +24,19 @@ export default function MinyanSchedule() {
   }
   return <section className="schedule" aria-labelledby="schedule-heading">
     <div className="schedule-heading">
-      <div><p className="eyebrow">UPCOMING NEAR YOU</p><h2 id="schedule-heading">Today&apos;s Shacharis Minyanim</h2><p className="schedule-summary">Cedar Grove · Today · Within 2 miles · 5 results</p></div>
+      <div><p className="eyebrow">UPCOMING NEAR YOU</p><h2 id="schedule-heading">Today&apos;s Shacharis Minyanim</h2><p className="schedule-summary">Catskills, NY · Today · Within 2 miles · 5 results</p></div>
       <Link className="schedule-all-link" href="/minyanim?prayer=Shacharis">View All Shacharis Minyanim <span aria-hidden="true">→</span></Link>
     </div>
     <ul className="schedule-list" aria-label="Sample Shacharis schedule">
       {minyanim.map((minyan) => <li key={minyan.time} className={`schedule-row ${minyan.status || ''}`}>
         <div className="schedule-time"><small>LOCAL TIME</small><span>{minyan.time.split(' ')[0]}<span className="schedule-period">{minyan.time.split(' ')[1]}</span></span></div>
-        <div className="schedule-shul"><h3>{minyan.name}</h3><p>{minyan.address}</p></div>
+        <div className="schedule-shul"><h3>{minyan.name}</h3><p>{minyan.address}, Catskills, NY</p></div>
         <div className="schedule-distance"><span><Icon type="pin" />{minyan.distance} mi</span><span><Icon type="clock" />{minyan.walk} min walk</span></div>
         <div className="schedule-status">{minyan.status && <span className={`schedule-badge ${minyan.status}`}><span aria-hidden="true">{minyan.status === 'next' ? '✓' : '◷'}</span>{minyan.status === 'next' ? 'NEXT MINYAN' : 'STARTING SOON'}</span>}</div>
         <button className="schedule-button" onClick={() => showShul(minyan)} aria-label={`View ${minyan.name}, ${minyan.time}`}>View Shul <span aria-hidden="true">→</span></button>
       </li>)}
     </ul>
     <div className="schedule-footer"><Link className="schedule-button" href="/minyanim">View All Minyanim <span aria-hidden="true">→</span></Link><p>Times shown are sample application data.</p></div>
-    <dialog ref={dialog} className="shul-dialog"><div><p className="eyebrow">SAMPLE SHUL DETAILS</p><h2>{selected?.name}</h2><p>{selected?.address}</p><p>Shacharis · {selected?.time}</p><p className="shul-disclaimer">These are sample details for the homepage preview, not a verified prayer schedule.</p><form method="dialog"><button className="schedule-button">Close</button></form></div></dialog>
+    <dialog ref={dialog} className="shul-dialog"><div><p className="eyebrow">SAMPLE SHUL DETAILS</p><h2>{selected?.name}</h2><p>{selected?.address}, Catskills, NY</p><p>Shacharis · {selected?.time}</p><p className="shul-disclaimer">These are sample details for the homepage preview, not a verified prayer schedule.</p><form method="dialog"><button className="schedule-button">Close</button></form></div></dialog>
   </section>;
 }

@@ -32,12 +32,12 @@ function Icon({ name, ...props }) {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>{paths[name]}</svg>;
 }
 
-function Brand({ footer = false }) {
-  return <Link href="/" className={styles.brand}><span className={styles.brandMark}>NM</span>{footer ? <span>Neighborhood<br />Minyanim</span> : <span>MIKVAH</span>}</Link>;
+function Brand() {
+  return <Link href="/" className={styles.brand}><span className={styles.brandMark} aria-hidden="true">CE</span><span>Catskills<br /><strong>Eruv</strong></span></Link>;
 }
 
 export default function MinyanFinder({ initialFilters }) {
-  const initialLocation = typeof initialFilters.location === "string" && initialFilters.location.trim() ? initialFilters.location.trim() : "Cedar Grove";
+  const initialLocation = typeof initialFilters.location === "string" && initialFilters.location.trim() ? initialFilters.location.trim() : "Catskills, NY";
   const [location, setLocation] = useState(initialLocation);
   const [area, setArea] = useState(initialLocation);
   const [prayer, setPrayer] = useState(prayers.includes(initialFilters.prayer) ? initialFilters.prayer : "Shacharis");
@@ -81,8 +81,8 @@ export default function MinyanFinder({ initialFilters }) {
     </header>
     <main className={styles.workspace}>
       <section className={styles.sidebar} aria-labelledby="finder-title">
-        <div className={styles.intro}><p className={styles.eyebrow}>PRAYER DISCOVERY</p><h1 id="finder-title">Find a Minyan</h1><p>Search nearby schedules and choose the minyan that works for you.</p></div>
-        <form className={styles.search} onSubmit={(event) => { event.preventDefault(); setArea(location.trim() || "Cedar Grove"); setNotice("Showing sample schedules for your search. Locations on the map are illustrative."); }}>
+        <div className={styles.intro}><p className={styles.eyebrow}>CATSKILLS ERUV · CATSKILLS, NY</p><h1 id="finder-title">Find a Minyan</h1><p>Find nearby minyanim, discover local shuls, and view prayer schedules throughout the Catskills.</p></div>
+        <form className={styles.search} onSubmit={(event) => { event.preventDefault(); setArea(location.trim() || "Catskills, NY"); setNotice("Showing sample schedules for your search. Locations on the map are illustrative."); }}>
           <label className={styles.searchField}><Icon name="search" /><span className="sr-only">Neighborhood or city</span><input id="location-search" value={location} onChange={(event) => setLocation(event.target.value)} placeholder="Neighborhood or city" /></label>
           <button className={styles.primaryButton} type="submit">Find Minyanim</button>
         </form>
@@ -111,16 +111,16 @@ export default function MinyanFinder({ initialFilters }) {
         </div>
       </section>
       <section className={styles.map} aria-label="Illustrative neighborhood map">
-        <div className={styles.park} aria-hidden="true"><span>CEDAR GROVE<br /><small>COMMUNITY PARK</small></span></div>
+        <div className={styles.park} aria-hidden="true"><span>CATSKILLS<br /><small>COMMUNITY PARK</small></span></div>
         <div className={`${styles.road} ${styles.roadOne}`} /><div className={`${styles.road} ${styles.roadTwo}`} /><div className={`${styles.road} ${styles.roadThree}`} /><div className={`${styles.road} ${styles.roadFour}`} /><div className={`${styles.road} ${styles.roadFive}`} />
         {shuls.filter((shul) => results.some((entry) => entry.shul === shul.id)).map((shul) => <button key={shul.id} className={`${styles.mapPin} ${selectedShul?.id === shul.id ? styles.selectedPin : ""}`} style={{ left: `${shul.x}%`, top: `${shul.y}%` }} aria-label={`Select ${shul.name}`} aria-pressed={selectedShul?.id === shul.id} onClick={() => selectEntry(results.find((entry) => entry.shul === shul.id))}>{shul.id}</button>)}
-        {selectedShul && <div className={styles.mapCard} aria-live="polite"><p className={styles.cardEyebrow}>{detailsOpen ? "SHUL DETAILS · SAMPLE" : "SELECTED MINYAN"}</p><div className={styles.cardDetails}><strong className={styles.cardTime}>{selected.time}</strong><div><h2>{selectedShul.name}</h2><p>{selectedShul.address}</p></div></div>{detailsOpen && <p className={styles.detailNote}>{prayer} · {day} · {selectedShul.walk} min walk<br />Sample schedule. Please confirm times with the shul.</p>}<button className={styles.outlineButton} onClick={() => setNotice(`Directions to ${selectedShul.name} will be available when the live map is connected.`)}><Icon name="route" />Directions</button></div>}
+        {selectedShul && <div className={styles.mapCard} aria-live="polite"><p className={styles.cardEyebrow}>{detailsOpen ? "SHUL DETAILS · SAMPLE" : "SELECTED MINYAN"}</p><div className={styles.cardDetails}><strong className={styles.cardTime}>{selected.time}</strong><div><h2>{selectedShul.name}</h2><p>{selectedShul.address}, Catskills, NY</p></div></div>{detailsOpen && <p className={styles.detailNote}>{prayer} · {day} · {selectedShul.walk} min walk<br />Sample schedule. Please confirm times with the shul.</p>}<button className={styles.outlineButton} onClick={() => setNotice(`Directions to ${selectedShul.name} will be available when the live map is connected.`)}><Icon name="route" />Directions</button></div>}
         <div className={styles.mapLegend}><span><i />Shul location</span><small>Map is a visual prototype</small></div>
       </section>
     </main>
     <footer className={styles.footer}>
-      <div className={styles.footerGrid}><div className={styles.footerAbout}><Brand footer /><p>Helping neighbors find prayer, community,<br />and a place to gather.</p><small>Sample schedules are not authoritative. Please confirm times with each shul.</small></div><div><h2>EXPLORE</h2><Link href="/minyanim">Find a Minyan</Link><Link href="/#resources">Our Shuls</Link><button onClick={() => changePrayer("Shabbos")}>Shabbos</button><button onClick={() => changePrayer("Daf Yomi")}>Daf Yomi</button></div><div><h2>COMMUNITY</h2><Link href="/#about">About</Link><Link href="/#information">Add a Shul</Link><Link href="/#information">Update a Schedule</Link><Link href="/#information">Contact</Link></div><div><h2>SUPPORT</h2><Link href="/#information">Accessibility</Link><Link href="/#information">Privacy</Link></div></div>
-      <div className={styles.footerBottom}><span>© Neighborhood Minyanim</span><span>One Community. Many Minyanim. Always Together.</span></div>
+      <div className={styles.footerGrid}><div className={styles.footerAbout}><Brand /><p>Helping Catskills neighbors find prayer,<br />community, and a place to gather.</p><small>Sample schedules are not authoritative. Please confirm times with each shul.</small></div><div><h2>EXPLORE</h2><Link href="/minyanim">Find a Minyan</Link><Link href="/#resources">Our Shuls</Link><button onClick={() => changePrayer("Shabbos")}>Shabbos</button><button onClick={() => changePrayer("Daf Yomi")}>Daf Yomi</button></div><div><h2>COMMUNITY</h2><Link href="/#about">About</Link><Link href="/#information">Add a Shul</Link><Link href="/#information">Update a Schedule</Link><Link href="/#information">Contact</Link></div><div><h2>SUPPORT</h2><Link href="/#information">Accessibility</Link><Link href="/#information">Privacy</Link></div></div>
+      <div className={styles.footerBottom}><span>© Catskills Eruv</span><span>One Community. Many Minyanim. Always Together.</span></div>
     </footer>
   </div>;
 }

@@ -1,8 +1,8 @@
 import MinyanFinder from "./minyan-finder";
 
 export const metadata = {
-  title: "Find a Minyan | Mikvah Project",
-  description: "Explore sample neighborhood minyan schedules and local shuls.",
+  title: "Find a Minyan | Catskills Eruv",
+  description: "Explore sample Catskills minyan schedules and local shuls.",
 };
 
 export default async function MinyanimPage({ searchParams }) {

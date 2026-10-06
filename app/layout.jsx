@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Mikvah Project | Community & Connection',
-  description: 'Mikvah Project — a community resource for mikvah information, preparation, and local Jewish life.',
+  title: 'Catskills Eruv | Community & Connection',
+  description: 'Catskills Eruv — find nearby minyanim, local shuls, and prayer schedules throughout the Catskills.',
 };
 
 export default function RootLayout({ children }) {

@@ -8,7 +8,7 @@ export default function ShabbosSection() {
     <div className="shabbos-intro">
       <p className="eyebrow">THIS SHABBOS</p>
       <h2 id="shabbos-heading">Parshas [dynamic value]</h2>
-      <p className="shabbos-date">[Gregorian date] · [Hebrew date]</p>
+      <p className="shabbos-date">[dynamic date] · [Hebrew date]</p>
       <p className="shabbos-description">A quieter rhythm for the seventh day. Review candle lighting and schedules from each participating shul.</p>
       <div className="candle-lighting"><span className="candle-glow" aria-hidden="true">●</span><div><p>CANDLE LIGHTING · LOCAL TIME</p><strong>[dynamic time]</strong></div></div>
       <p className="shabbos-note">PREVIEW VALUES · CONFIRM ALL TIMES WITH YOUR SHUL.</p>
