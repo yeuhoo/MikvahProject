@@ -19,13 +19,13 @@ export function CommunityStatement() {
   </section>;
 }
 
-export default function CommunityFooter() {
+export default function CommunityFooter({ standalone = false }) {
   const [info, setInfo] = useState(null);
   return <footer className="community-footer">
     <div className="footer-grid">
-      <div className="footer-about"><a className="footer-brand" href="#main"><span className="footer-monogram" aria-hidden="true">NM</span><span>Neighborhood<br />Minyanim</span></a><p>Helping neighbors find prayer, community,<br />and a place to gather.</p><p className="footer-disclaimer">Sample schedules are not authoritative. Please confirm times with each shul.</p></div>
-      <nav aria-label="Explore"><h3>EXPLORE</h3><a href="#minyan-search">Find a Minyan</a><a href="#our-shuls">Our Shuls</a><a href="#shabbos">Shabbos</a><a href="#daf-yomi">Daf Yomi</a></nav>
-      <nav aria-label="Community"><h3>COMMUNITY</h3><a href="#about">About</a>{['Add a Shul', 'Update a Schedule', 'Contact'].map(label => <button key={label} onClick={() => setInfo(label)}>{label}</button>)}</nav>
+      <div className="footer-about"><a className="footer-brand" href={standalone ? "/" : "#main"}><span className="footer-monogram" aria-hidden="true">NM</span><span>Neighborhood<br />Minyanim</span></a><p>Helping neighbors find prayer, community,<br />and a place to gather.</p><p className="footer-disclaimer">Sample schedules are not authoritative. Please confirm times with each shul.</p></div>
+      <nav aria-label="Explore"><h3>EXPLORE</h3><a href={standalone ? "/minyanim" : "#minyan-search"}>Find a Minyan</a><a href={standalone ? "/#our-shuls" : "#our-shuls"}>Our Shuls</a><a href="/shabbos">Shabbos</a><a href={standalone ? "/#daf-yomi" : "#daf-yomi"}>Daf Yomi</a></nav>
+      <nav aria-label="Community"><h3>COMMUNITY</h3><a href={standalone ? "/#about" : "#about"}>About</a>{['Add a Shul', 'Update a Schedule', 'Contact'].map(label => <button key={label} onClick={() => setInfo(label)}>{label}</button>)}</nav>
       <nav aria-label="Support"><h3>SUPPORT</h3>{['Accessibility', 'Privacy'].map(label => <button key={label} onClick={() => setInfo(label)}>{label}</button>)}</nav>
     </div>
     {info && <div className="footer-info" role="status"><div><strong>{info}</strong><p>{supportText[info]}</p></div><button onClick={() => setInfo(null)} aria-label="Close information">×</button></div>}
