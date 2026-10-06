@@ -8,13 +8,18 @@ import ShabbosSection from "./shabbos-section";
 import OurShuls from "./our-shuls";
 import DafYomi from "./daf-yomi";
 import CommunityFooter, { CommunityStatement } from "./community-footer";
+import NavbarActions from "./navbar-actions";
+import useMyLocation from "./use-my-location";
 
 export default function Home() {
   const router = useRouter();
   const [dates, setDates] = useState({ civil: "", hebrew: "", year: "2026" });
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState("");
-  const [locating, setLocating] = useState(false);
+  const { locating, useLocation } = useMyLocation((coordinates) => {
+    setLocation(coordinates);
+    setStatus("Location added. Select Find Minyanim to view sample schedules.");
+  }, setStatus);
   useEffect(() => {
     const now = new Date();
     setDates({
@@ -28,29 +33,13 @@ export default function Home() {
     const query = new URLSearchParams(new FormData(event.currentTarget));
     router.push(`/minyanim?${query.toString()}`);
   }
-  function useLocation() {
-    if (!navigator.geolocation) {
-      setStatus("Location is unavailable in this browser. Please enter your neighborhood or city.");
-      return;
-    }
-    setLocating(true);
-    setStatus("Finding your location…");
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation(`${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`);
-      setLocating(false);
-      setStatus("Location added. Select Find Minyanim to view sample schedules.");
-    }, () => {
-      setLocating(false);
-      setStatus("Unable to access your location. Please enter your neighborhood or city.");
-    }, { timeout: 10000, maximumAge: 60000 });
-  }
   return (<>
 <a className="skip-link" href="#main">Skip to content</a>
   <div className="topline"><span>A place for tradition. A resource for community.</span><span lang="he" dir="rtl">ב״ה</span></div>
   <header className="header">
     <a className="brand" href="#" aria-label="Mikvah Project home"><span className="brand-mark" aria-hidden="true">≈</span><span>MIKVAH<span className="brand-sub">PROJECT</span></span></a>
-    <nav aria-label="Main navigation"><a className="active" href="#main">Home</a><Link href="/minyanim">Find a Minyan</Link><a href="#our-shuls">Our Shuls</a><a href="#shabbos">Shabbos</a><a href="#daf-yomi">Daf Yomi</a><a href="#about">About</a></nav>
-    <a className="header-link" href="#our-shuls">Explore our shuls <span aria-hidden="true">↗</span></a>
+    <nav aria-label="Main navigation"><a className="active" href="#main">Home</a><Link href="/minyanim">Find a Minyan</Link><a href="#our-shuls">Our Shuls</a><Link href="/shabbos">Shabbos</Link><a href="#daf-yomi">Daf Yomi</a><a href="#about">About</a></nav>
+    <NavbarActions searchTarget="#location" onUseLocation={useLocation} locating={locating} />
   </header>
   <main id="main">
     <section className="minyan-hero" aria-labelledby="hero-title">

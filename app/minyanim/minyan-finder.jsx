@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./minyanim.module.css";
+import NavbarActions from "../navbar-actions";
+import useMyLocation from "../use-my-location";
 
 const prayers = ["Shacharis", "Mincha", "Maariv", "Shabbos", "Daf Yomi"];
 const shuls = [
@@ -45,6 +47,11 @@ export default function MinyanFinder({ initialFilters }) {
   const [selectedKey, setSelectedKey] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [notice, setNotice] = useState("");
+  const { locating, useLocation } = useMyLocation((coordinates) => {
+    setLocation(coordinates);
+    setArea(coordinates);
+    setNotice("Location added. Schedules and map distances are still illustrative sample data.");
+  }, setNotice);
   const results = schedules[prayer].filter((entry) => {
     const shul = shuls.find((item) => item.id === entry.shul);
     return shul.distance <= Number(distance) && (time === "Any time" || entry.time.endsWith(time === "Morning" ? "AM" : "PM"));
@@ -52,11 +59,6 @@ export default function MinyanFinder({ initialFilters }) {
   const selected = results.find((entry) => `${entry.shul}-${entry.time}` === selectedKey) || results[0];
   const selectedShul = selected && shuls.find((shul) => shul.id === selected.shul);
 
-  function useSampleLocation() {
-    setLocation("Cedar Grove");
-    setArea("Cedar Grove");
-    setNotice("Showing Cedar Grove sample results. Live location search is coming soon.");
-  }
   function changePrayer(nextPrayer) {
     setPrayer(nextPrayer);
     setSelectedKey(null);
@@ -73,9 +75,9 @@ export default function MinyanFinder({ initialFilters }) {
       <Brand />
       <nav className={styles.nav} aria-label="Main navigation">
         <Link href="/">Home</Link><Link href="/minyanim" aria-current="page">Find a Minyan</Link><Link href="/#resources">Our Shuls</Link>
-        <button onClick={() => changePrayer("Shabbos")}>Shabbos</button><button onClick={() => changePrayer("Daf Yomi")}>Daf Yomi</button><Link href="/#about">About</Link>
+        <Link href="/shabbos">Shabbos</Link><button onClick={() => changePrayer("Daf Yomi")}>Daf Yomi</button><Link href="/#about">About</Link>
       </nav>
-      <div className={styles.headerActions}><a href="#location-search" aria-label="Search for a minyan"><Icon name="search" /></a><button className={styles.outlineButton} onClick={useSampleLocation}><Icon name="location" />Use My Location</button></div>
+      <NavbarActions searchTarget="#location-search" onUseLocation={useLocation} locating={locating} />
     </header>
     <main className={styles.workspace}>
       <section className={styles.sidebar} aria-labelledby="finder-title">
@@ -89,7 +91,7 @@ export default function MinyanFinder({ initialFilters }) {
           <label><span>DATE</span><select value={day} onChange={(event) => setDay(event.target.value)}><option>Today</option><option>Tomorrow</option></select></label>
           <label><span>TIME</span><select value={time} onChange={(event) => setTime(event.target.value)}><option>Any time</option><option>Morning</option><option>Afternoon / evening</option></select></label>
           <label><span>DISTANCE</span><select value={distance} onChange={(event) => setDistance(event.target.value)}><option value="1">1 mile</option><option value="2">2 miles</option><option value="5">5 miles</option><option value="10">10 miles</option></select></label>
-          <button className={styles.useLocation} onClick={useSampleLocation}><Icon name="location" />Use location</button>
+          <button className={styles.useLocation} onClick={useLocation} disabled={locating}><Icon name="location" />{locating ? 'Locating…' : 'Use location'}</button>
         </div>
         {notice && <p className={styles.notice} role="status">{notice}</p>}
         <div className={styles.resultsHeading}><h2 id="minyan-results" aria-live="polite">{results.length} {prayer} {prayer === "Daf Yomi" ? "classes" : "minyanim"}</h2><span>{area} · {day === "Tomorrow" ? "Tomorrow · " : ""}Sample schedule</span></div>
@@ -98,8 +100,11 @@ export default function MinyanFinder({ initialFilters }) {
             const shul = shuls.find((item) => item.id === entry.shul);
             const isSelected = selected === entry;
             return <article key={`${entry.shul}-${entry.time}`} className={`${styles.result} ${isSelected ? styles.selectedResult : ""} ${index === 1 ? styles.soonResult : ""}`}>
-              <div className={styles.resultTop}><button className={styles.resultSelect} onClick={() => selectEntry(entry)} aria-pressed={isSelected}><span className={styles.time}><strong>{entry.time}</strong><small>SAMPLE TIME</small></span><span className={styles.shul}><strong>{shul.name}</strong><span>{shul.address}</span></span></button>{index < 2 && <span className={`${styles.badge} ${index === 1 ? styles.soonBadge : ""}`}>{index === 0 ? "✓" : <Icon name="clock" width="12" />}<span>{index === 0 ? <>NEXT<br />MINYAN</> : <>STARTING<br />SOON</>}</span></span>}</div>
-              <div className={styles.resultBottom}><span><Icon name="pin" />{shul.distance} mi</span><span><Icon name="clock" />{shul.walk} min walk</span><button className={styles.outlineButton} onClick={() => selectEntry(entry, true)}>View Shul</button></div>
+              <button className={styles.time} onClick={() => selectEntry(entry)} aria-pressed={isSelected} aria-label={`Select ${shul.name}, ${entry.time}`}><small>LOCAL TIME</small><strong>{entry.time.split(' ')[0]} <span className={styles.period}>{entry.time.split(' ')[1]}</span></strong></button>
+              <button className={styles.shul} onClick={() => selectEntry(entry)} aria-pressed={isSelected}><strong>{shul.name}</strong><span>{shul.address}, Catskills, NY</span></button>
+              {index < 2 && <span className={`${styles.badge} ${index === 1 ? styles.soonBadge : ""}`}>{index === 0 ? "✓" : <Icon name="clock" width="12" />}<span>{index === 0 ? 'NEXT MINYAN' : 'STARTING SOON'}</span></span>}
+              <div className={styles.resultBottom}><span><Icon name="pin" />{shul.distance} mi</span><span><Icon name="clock" />{shul.walk} min walk</span></div>
+              <button className={styles.viewShul} onClick={() => selectEntry(entry, true)}>View Shul <span aria-hidden="true">→</span></button>
             </article>;
           })}
           {!results.length && <p className={styles.empty}>No sample schedules match these filters. Choose another time or prayer.</p>}
