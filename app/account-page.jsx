@@ -26,7 +26,7 @@ export default function AccountPage({ signup = false }) {
       <aside className={styles.community} aria-labelledby="contributor-title">
         <span className={styles.contributorMark} aria-hidden="true">CE</span>
         <p className={styles.eyebrow}>COMMUNITY CONTRIBUTOR</p>
-        <h2 id="contributor-title">Keep community<br />information<br />current.</h2>
+        <h2 id="contributor-title">Keep community<br />{' '}information<br />{' '}current.</h2>
         <p className={styles.description}>Contributors help neighbors find trusted, accurate details about local Mikvahs, Shuls, and Minyanim.</p>
         <ul className={styles.benefits}><li>Save work as a draft</li><li>Manage multiple listings</li><li>Every submission is reviewed</li></ul>
       </aside>
