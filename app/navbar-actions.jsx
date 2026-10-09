@@ -18,9 +18,11 @@ export default function NavbarActions({ searchTarget, onUseLocation, locating })
     <Link href={searchTarget} className={styles.search} aria-label="Search for a minyan" onClick={focusSearch}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
     </Link>
-    <button className={styles.location} type="button" onClick={onUseLocation} disabled={locating} aria-busy={locating}>
+    {onUseLocation && <button className={styles.location} type="button" onClick={onUseLocation} disabled={locating} aria-busy={locating}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v4m0 12v4M2 12h4m12 0h4" /></svg>
       {locating ? 'Locating…' : 'Use My Location'}
-    </button>
+    </button>}
+    <Link href="/log-in" className={styles.login}>Log In</Link>
+    <Link href="/sign-up" className={styles.signup}>Sign Up</Link>
   </div>;
 }
